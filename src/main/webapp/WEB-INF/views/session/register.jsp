@@ -6,12 +6,54 @@
 <jsp:include page="/WEB-INF/views/common/commonHeader.jsp" />
 <script type="text/javascript">
 $(document).ready(function() {
-	$("#email").focusin(function() { if ($(this).val() == "member@whoneedhelp.com") $(this).val(""); });
-	$("#email").focusout(function() { if ($(this).val() == "") $(this).val("member@whoneedhelp.com"); });
-
-	$("#password").focusin(function() { if ($(this).val() == "whoneedhelp") $(this).val(""); });
-	$("#password").focusout(function() { if ($(this).val() == "") $(this).val("whoneedhelp"); });
+	$(".alert").hide();
 });
+
+var SignUp = {
+	    check: function (id) {
+	    	var verify = true;
+	    	
+	    	var value = $.trim($("#" + id)[0].value); 
+	        if (value == '') {
+	    		verify = false;
+	        };
+
+	        switch (id)
+	        {
+		        case "email":
+		        	if (!IsEmail(value)) verify = false;
+		        	break;
+		        case "password":
+		        	if (value.length < 8 || value.length > 15) verify = false;
+			        if ($("#password")[0].value != $("#repeatPassword")[0].value) {
+			            $("#repeatPassword")[0].focus();
+			            $("#repeatPassword_alert").show();
+
+			            verify = false;
+			        }
+		        	break;
+	        }
+	        if (!verify)
+        	{
+	            $("#" + id)[0].focus();
+	            $("#" + id + "_alert").show();
+        	} else
+        		$("#" + id + "_alert").hide();
+	        return verify;
+	    },
+	    validate: function () {
+	        if (SignUp.check("username") == false) {
+	            return false;
+	        }
+	        if (SignUp.check("email") == false) {
+	            return false;
+	        }
+	        if (SignUp.check("password") == false) {
+	            return false;
+	        }
+	        $("#registerForm")[0].submit();
+	    }
+	}
 </script>
 <body>
 <jsp:include page="/WEB-INF/views/common/commonBodyTop.jsp" />
@@ -19,32 +61,26 @@ $(document).ready(function() {
 <div class="container">
 
 	<div class="page-header">
-	    <h2>Register for INVO</h2>
+	    <h2>Register for WHO NEED HELP?</h2>
 	</div>
 	
-	<form id="registerForm" class="form-horizontal" onbeforesubmit="return false" method="post" action="/session/register">    <fieldset>
+	<form id="registerForm" class="form-horizontal" onbeforesubmit="return false" method="post" action="/session/register">    
+		<fieldset>
         <div class="control-group">
-            <label class="control-label" for="name">Your Full Name</label>
+            <label class="control-label" for="username">Username (Nick)</label>
             <div class="controls">
-                <input class="input-xlarge" name="name" id="name" value="" type="text" />                <p class="help-block">(required)</p>
-                <div class="alert" id="name_alert">
-                    <strong>Warning!</strong> Please enter your full name
-                </div>
-            </div>
-        </div>
-        <div class="control-group">
-            <label class="control-label" for="username">Username</label>
-            <div class="controls">
-                <input class="input-xlarge" name="username" id="username" value="" type="text" />                <p class="help-block">(required)</p>
+                <input class="input-xlarge" name="username" id="username" value="" type="text" />                
+                <p class="help-block">(required)</p>
                 <div class="alert" id="username_alert">
                     <strong>Warning!</strong> Please enter your desired user name
                 </div>
             </div>
         </div>
         <div class="control-group">
-            <label class="control-label" for="email">Email Address</label>
+            <label class="control-label" for="email">Email Address (ID)</label>
             <div class="controls">
-                <input class="input-xlarge" name="email" id="email" value="" type="text" />                <p class="help-block">(required)</p>
+                <input class="input-xlarge" name="email" id="email" value="" type="text" />                
+                <p class="help-block">(required)</p>
                 <div class="alert" id="email_alert">
                     <strong>Warning!</strong> Please enter your email
                 </div>
@@ -53,7 +89,8 @@ $(document).ready(function() {
         <div class="control-group">
             <label class="control-label" for="password">Password</label>
             <div class="controls">
-                <input class="input-xlarge" name="password" id="password" value="" type="password" />                <p class="help-block">(minimum 8 characters)</p>
+                <input class="input-xlarge" name="password" id="password" value="" type="password" />                
+                <p class="help-block">(required, minimum 8 and maximum 15 characters)</p>
                 <div class="alert" id="password_alert">
                     <strong>Warning!</strong> Please provide a valid password
                 </div>
@@ -62,14 +99,16 @@ $(document).ready(function() {
         <div class="control-group">
             <label class="control-label" for="repeatPassword">Repeat Password</label>
             <div class="controls">
-                <input class="input-xlarge" name="repeatPassword" id="repeatPassword" value="" type="password" />                <div class="alert" id="repeatPassword_alert">
+                <input class="input-xlarge" name="repeatPassword" id="repeatPassword" value="" type="password" />                
+                <div class="alert" id="repeatPassword_alert">
                     <strong>Warning!</strong> The password does not match
                 </div>
             </div>
         </div>
         <p>By signing up, you accept terms of use and privacy policy.</p>
         <div class="form-actions">
-            <input class="btn btn-primary btn-large" onclick="return SignUp.validate();" value="Register" type="submit" />        </div>
+            <input class="btn btn-primary btn-large" onclick="return SignUp.validate();" value="Register" type="submit" />        
+        </div>
     </fieldset>
 	</form>
 	<jsp:include page="/WEB-INF/views/common/commonBodyBottom.jsp" />

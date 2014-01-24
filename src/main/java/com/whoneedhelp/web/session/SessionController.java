@@ -7,6 +7,7 @@ import javax.servlet.http.HttpSession;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.whoneedhelp.web.common.CommonBuilder;
@@ -62,12 +63,18 @@ public class SessionController {
 		return loginResult;
 	}
 
-	@RequestMapping(value = "/register")
+	@RequestMapping(value = "/register", method = RequestMethod.GET)
 	public void register(HttpSession session, Model model)
 	{
 		HashMap<String, String> defaultParam = CommonBuilder.CommonSetter(session);
 		defaultParam = CommonBuilder.MenuSetter(defaultParam, "Login", "", "");
 		
 		model.addAllAttributes(defaultParam);
+	}
+
+	@RequestMapping(value = "/register", method = RequestMethod.POST)
+	public void register()
+	{
+		System.out.print("============" + "register" + "===================\n");
 	}
 }
