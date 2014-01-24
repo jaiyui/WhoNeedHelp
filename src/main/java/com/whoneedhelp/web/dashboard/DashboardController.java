@@ -8,8 +8,14 @@
 
 package com.whoneedhelp.web.dashboard;
 
+import java.util.HashMap;
+import javax.servlet.http.HttpSession;
+
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
+
+import com.whoneedhelp.web.common.CommonBuilder;
 
 /**
  * @brief 	대시보드 컨트롤러 클래스
@@ -24,8 +30,11 @@ import org.springframework.web.bind.annotation.RequestMapping;
 @RequestMapping("/dashboard")
 public class DashboardController {
 
-	public void view()
-	{
+	@RequestMapping(value = "/view")
+	public void view(HttpSession session, Model model){
+		HashMap<String, String> defaultParam = CommonBuilder.CommonSetter(session);
+		defaultParam = CommonBuilder.MenuSetter(defaultParam, "Index", "1", "1");
 		
+		model.addAllAttributes(defaultParam);
 	}
 }
