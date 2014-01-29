@@ -20,7 +20,7 @@ var SignUp = {
 
 	        switch (id)
 	        {
-		        case "email":
+		        case "id":
 		        	if (!IsEmail(value)) verify = false;
 		        	break;
 		        case "password":
@@ -42,16 +42,16 @@ var SignUp = {
 	        return verify;
 	    },
 	    validate: function () {
-	        if (SignUp.check("username") == false) {
+	        if (SignUp.check("nickname") == false) {
 	            return false;
 	        }
-	        if (SignUp.check("email") == false) {
+	        if (SignUp.check("id") == false) {
 	            return false;
 	        }
 	        if (SignUp.check("password") == false) {
 	            return false;
 	        }
-	        $("#registerForm")[0].submit();
+	        $("#fellows")[0].submit();
 	    }
 	}
 </script>
@@ -64,25 +64,25 @@ var SignUp = {
 	    <h2>Register for WHO NEED HELP?</h2>
 	</div>
 	
-	<form id="registerForm" class="form-horizontal" onbeforesubmit="return false" method="post" action="/session/register">    
+	<form id="Fellows" name="Fellows" class="form-horizontal" onbeforesubmit="return false" method="post" action="/session/register">    
 		<fieldset>
         <div class="control-group">
-            <label class="control-label" for="username">Username (Nick)</label>
+            <label class="control-label" for="nickname">nickname (Nick)</label>
             <div class="controls">
-                <input class="input-xlarge" name="username" id="username" value="" type="text" />                
+                <input class="input-xlarge" name="nickname" id="nickname" value="" type="text" />                
                 <p class="help-block">(required)</p>
-                <div class="alert" id="username_alert">
+                <div class="alert" id="nickname_alert">
                     <strong>Warning!</strong> Please enter your desired user name
                 </div>
             </div>
         </div>
         <div class="control-group">
-            <label class="control-label" for="email">Email Address (ID)</label>
+            <label class="control-label" for="id">Email Address (ID)</label>
             <div class="controls">
-                <input class="input-xlarge" name="email" id="email" value="" type="text" />                
+                <input class="input-xlarge" name="id" id="id" value="" type="text" />                
                 <p class="help-block">(required)</p>
-                <div class="alert" id="email_alert">
-                    <strong>Warning!</strong> Please enter your email
+                <div class="alert" id="id_alert">
+                    <strong>Warning!</strong> Please enter your valid email
                 </div>
             </div>
         </div>

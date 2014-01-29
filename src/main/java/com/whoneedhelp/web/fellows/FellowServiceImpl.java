@@ -2,12 +2,21 @@ package com.whoneedhelp.web.fellows;
 
 import java.util.List;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
+import com.whoneedhelp.web.common.Utils;
+
+@Service
 public class FellowServiceImpl implements FellowService {
+
+	@Autowired FellowDAO dao;
 
 	@Override
 	public void create(Fellows fellows) {
-		// TODO Auto-generated method stub
+		fellows.password = Utils.encodeMD5(fellows.password);
 
+		dao.create(fellows);
 	}
 
 	@Override
@@ -18,8 +27,7 @@ public class FellowServiceImpl implements FellowService {
 
 	@Override
 	public Fellows read(String id) {
-		// TODO Auto-generated method stub
-		return null;
+		return dao.read(id);
 	}
 
 	@Override
@@ -35,8 +43,7 @@ public class FellowServiceImpl implements FellowService {
 	}
 
 	@Override
-	public List<Fellows> list(String target, String keyword, int page,
-			int perPage) {
+	public List<Fellows> list(String target, String keyword, int page, int perPage) {
 		// TODO Auto-generated method stub
 		return null;
 	}
@@ -49,8 +56,9 @@ public class FellowServiceImpl implements FellowService {
 
 	@Override
 	public Boolean verify(String id, String password) {
-		// TODO Auto-generated method stub
-		return null;
+		password = Utils.encodeMD5(password);
+
+		return dao.verify(id, password);
 	}
 
 }

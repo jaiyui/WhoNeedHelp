@@ -20,7 +20,7 @@
 	<context:property-placeholder location="classpath*:*.properties" />
 	
 	<!-- 빈등록(@Component,@Service,@Repository), 주입(@Autowired,@Inject,@Resource) -->
-	<context:component-scan base-package="com.wemakeprice.dist">
+	<context:component-scan base-package="com.whoneedhelp.web">
 		<context:exclude-filter expression="org.springframework.stereotype.Controller" type="annotation" />
 	</context:component-scan>
 	
@@ -30,9 +30,9 @@
 	
     <bean id="dataSource" class="org.apache.commons.dbcp.BasicDataSource">
         <property name="driverClassName" value="com.mysql.jdbc.Driver" />
-        <property name="url" value="jdbc:mysql://192.168.2.8:3306/deploy?autoReconnect=true&amp;useServerPrepStmts=true&amp;characterEncoding=UTF-8"/>
-	    <property name="username" value="deploy_dev" />
-	    <property name="password" value="qovhelql#@!" />
+        <property name="url" value="jdbc:mysql://127.0.0.1:3306/whoneedhelp?autoReconnect=true&amp;useServerPrepStmts=true&amp;"/>
+	    <property name="username" value="whoneedhelp" />
+	    <property name="password" value="12345a" />
         <property name="poolPreparedStatements" value="true" />
         <property name="maxActive" value="10" />
         <property name="maxIdle" value="10" />

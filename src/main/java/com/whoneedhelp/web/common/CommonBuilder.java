@@ -10,9 +10,10 @@ public class CommonBuilder {
 	{
 		HashMap<String, String> defaultParam = new HashMap<String, String>();
 		defaultParam.put("id", (String)session.getAttribute("id"));
-		defaultParam.put("name", (String)session.getAttribute("name"));
+		defaultParam.put("nickname", (String)session.getAttribute("nickname"));
 		defaultParam.put("topMenu", "1");
 		defaultParam.put("middleMenu", "1");
+		defaultParam.put("lowMenu", "1");
 		return defaultParam;
 	}
 

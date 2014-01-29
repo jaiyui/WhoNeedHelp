@@ -3,18 +3,26 @@ package com.whoneedhelp.web.session;
 import java.util.HashMap;
 
 import javax.servlet.http.HttpSession;
+import javax.validation.Valid;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.Errors;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import com.whoneedhelp.web.fellows.FellowService;
+import com.whoneedhelp.web.fellows.Fellows;
 import com.whoneedhelp.web.common.CommonBuilder;
 
 @Controller
 @RequestMapping("/session")
 public class SessionController {
+
+	@Autowired FellowService fellowService;
 
 	@RequestMapping(value = "/index")
 	public String sessionDivider(HttpSession session)
@@ -27,12 +35,13 @@ public class SessionController {
 
 
 	@RequestMapping(value = "/login")
-	public String login(HttpSession session, Model model)
+	public String login(@RequestParam(defaultValue="wait")String result, HttpSession session, Model model)
 	{
 		HashMap<String, String> defaultParam = CommonBuilder.CommonSetter(session);
 		defaultParam = CommonBuilder.MenuSetter(defaultParam, "Login", "", "");
 		
 		model.addAllAttributes(defaultParam);
+		model.addAttribute("result", result);
 		return "/session/loginForm"; 
 	}
 
@@ -44,23 +53,20 @@ public class SessionController {
 	}	
 
 	@RequestMapping(value = "/start")
-	@ResponseBody
-	public Boolean start(String id, String pw, HttpSession session)
+	public String start(String email, String password, HttpSession session)
 	{
-		Boolean loginResult = false;
-		/*
-		Boolean loginResult = certifyService.certify(id, pw);
+		Boolean loginResult = fellowService.verify(email, password);
+
 		if (loginResult)
 		{
-			Employee employee = employeeService.read(id);
-			session.setAttribute("no", String.valueOf(employee.getEmp_no()));
-			session.setAttribute("id", employee.getEmp_id());
-			session.setAttribute("name", employee.getEmp_nm());
-			session.setAttribute("super", String.valueOf(employee.getEmp_super()));
+			Fellows fellow = fellowService.read(email);
+			session.setAttribute("fellowSeq", String.valueOf(fellow.getFellowSeq()));
+			session.setAttribute("id", fellow.getId());
+			session.setAttribute("nickname", fellow.getNickname());
 			session.setMaxInactiveInterval(3600);
-		}
-		*/
-		return loginResult;
+			return "redirect:/dashboard/view";
+		} else
+			return "redirect:login?result=failure";
 	}
 
 	@RequestMapping(value = "/register", method = RequestMethod.GET)
@@ -73,8 +79,11 @@ public class SessionController {
 	}
 
 	@RequestMapping(value = "/register", method = RequestMethod.POST)
-	public void register()
+	public String register(@Valid Fellows fellows, Errors errors)
 	{
-		System.out.print("============" + "register" + "===================\n");
+		if (errors.hasErrors()) return "/session/register";	
+		fellowService.create(fellows); 
+		
+		return "redirect:login";
 	}
 }

@@ -5,12 +5,16 @@
 
 <jsp:include page="/WEB-INF/views/common/commonHeader.jsp" />
 <script type="text/javascript">
+var result = "${result}";
+
 $(document).ready(function() {
 	$("#email").focusin(function() { if ($(this).val() == "member@whoneedhelp.com") $(this).val(""); });
 	$("#email").focusout(function() { if ($(this).val() == "") $(this).val("member@whoneedhelp.com"); });
 
 	$("#password").focusin(function() { if ($(this).val() == "whoneedhelp") $(this).val(""); });
 	$("#password").focusout(function() { if ($(this).val() == "") $(this).val("whoneedhelp"); });
+	
+	if (result != "failure") $("#login_alert").hide();
 });
 </script>
 <body>
@@ -25,6 +29,9 @@ $(document).ready(function() {
 	            </div>
             	<form class="form-inline" action="/session/start" method="post">
 	                <fieldset>
+		                <div class="alert" id="login_alert">
+		                    <strong>Error!</strong> Please enter your Id and password correctly
+		                </div>
 	                    <div class="control-group">
 	                        <label class="control-label" for="email">Username/Email</label>
 	                        <div class="controls">

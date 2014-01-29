@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="Fellows">
+	<select id="checkidduplicate" parameterType="String" resultType="int">
+		SELECT COUNT(*) FROM fellows WHERE id = #{id}
+ 	</select>
+
+	<select id="checknicknameduplicate" parameterType="String" resultType="int">
+		SELECT COUNT(*) FROM fellows WHERE nickname = #{nickname}
+ 	</select>
+
+	<insert id="add" parameterType="Fellows">
+		INSERT INTO fellows (
+			nickname, id, password
+		) VALUES (
+			#{nickname}, #{id}, #{password}
+		)
+ 	</insert>
+ 	
+	<update id="update" parameterType="Fellows">
+		UPDATE fellows SET 
+			<if test='password != null'>
+			password = #{password},
+			</if>
+			nickname = #{nickname} 
+		WHERE 
+			id = #{id}
+	</update>
+ 	
+	<select id="read" parameterType="String" resultType="Fellows">
+		SELECT fellowSeq, nickname, id, password, regDate, isActive FROM fellows WHERE id = #{id}
+ 	</select>
+
+ 	<update id="active" parameterType="int">
+		UPDATE fellows SET isActive = 0 WHERE id = #{id}
+	</update>
+ 	
+ 	<update id="inactive" parameterType="int">
+		UPDATE fellows SET isActive = 1 WHERE id = #{id}
+	</update>
+ 	
+	<select id="list" parameterType="HashMap" resultType="Fellows">
+		SELECT 
+			fellowSeq, nickname, id, password, regDate, isActive 
+		FROM 
+			fellows
+		WHERE
+			isActive = 0
+			<if test='keyword != null'>			
+				<if test="target == 'Name'"> 
+					AND nickname LIKE CONCAT('%', #{keyword}, '%')
+				</if>
+				<if test="target == 'Id'"> 
+					AND id LIKE CONCAT('%', #{keyword}, '%')
+				</if>
+			</if>
+		ORDER BY 
+			id ASC 
+		LIMIT 
+			${page}, ${perPage} 
+ 	</select>	
+
+	<select id="getlistcount" parameterType="HashMap" resultType="int">
+		SELECT 
+			COUNT(*)
+		FROM
+			fellows
+		WHERE
+			isActive = 0
+			<if test='keyword != null'>			
+				<if test="target == 'Name'"> 
+					AND nickname LIKE CONCAT('%', #{keyword}, '%')
+				</if>
+				<if test="target == 'Id'"> 
+					AND id LIKE CONCAT('%', #{keyword}, '%')
+				</if>
+			</if>		 
+ 	</select>	
+
+	<select id="certify" parameterType="HashMap" resultType="int">
+ 	</select>
+
+	<select id="verify" parameterType="HashMap" resultType="int">
+		SELECT COUNT(*) AS foundCount FROM fellows WHERE id = "${id}" AND password = "${password}" 
+ 	</select>
+</mapper>

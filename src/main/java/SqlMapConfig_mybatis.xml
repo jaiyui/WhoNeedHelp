@@ -5,8 +5,10 @@
 
 <configuration>
 	<typeAliases> 
+		<typeAlias alias="Fellows" type="com.whoneedhelp.web.fellows.Fellows" /> 
 	</typeAliases>
 
 	<mappers> 
+		<mapper resource="com/whoneedhelp/web/mybatis/Fellows.xml"/>
 	</mappers>
 </configuration>

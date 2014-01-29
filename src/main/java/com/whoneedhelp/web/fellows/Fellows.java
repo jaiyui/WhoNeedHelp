@@ -2,6 +2,9 @@ package com.whoneedhelp.web.fellows;
 
 import java.sql.Date;
 
+import javax.persistence.Entity;
+
+@Entity
 public class Fellows {
 	int fellowSeq;
 	String nickname;
