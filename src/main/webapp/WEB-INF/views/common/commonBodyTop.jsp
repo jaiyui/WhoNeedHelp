@@ -15,7 +15,7 @@ function setMenu()
 	
 	if (id != "") 
 	{
-		$("#menuFellow").html("<a href='#'>" + nickname + "</a>");
+		$("#menuFellow").html("<a href='/fellow/profile'>" + nickname + "</a>");
 		$("#menuLogin").html("<a href='/session/logout'>Log out</a>");
 	}
 }

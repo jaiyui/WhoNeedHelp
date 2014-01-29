@@ -6,6 +6,8 @@
 <jsp:include page="/WEB-INF/views/common/commonHeader.jsp" />
 <script type="text/javascript">
 var result = "${result}";
+var url = "<c:out value='${url}'/>";
+var queryString = "<c:out value='${querystring}'/>";
 
 $(document).ready(function() {
 	$("#email").focusin(function() { if ($(this).val() == "member@whoneedhelp.com") $(this).val(""); });
@@ -15,7 +17,14 @@ $(document).ready(function() {
 	$("#password").focusout(function() { if ($(this).val() == "") $(this).val("whoneedhelp"); });
 	
 	if (result != "failure") $("#login_alert").hide();
+	// 로그인이 끝나면 지정된 경로로 이동하기 위해 보관
+	$("#url").val(url);
+	$("#queryString").val(htmlDecode(queryString));
 });
+
+function htmlDecode(value){
+	  return $('<div⁄>').html(value).text();
+}
 </script>
 <body>
 <jsp:include page="/WEB-INF/views/common/commonBodyTop.jsp" />
@@ -28,6 +37,8 @@ $(document).ready(function() {
 	                <h2>Log In</h2>
 	            </div>
             	<form class="form-inline" action="/session/start" method="post">
+            		<input id="url" type="hidden" value="" name="url" />
+            		<input id="queryString" type="hidden" value="" name="queryString" />
 	                <fieldset>
 		                <div class="alert" id="login_alert">
 		                    <strong>Error!</strong> Please enter your Id and password correctly

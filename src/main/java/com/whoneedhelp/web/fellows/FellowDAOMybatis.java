@@ -34,10 +34,6 @@ public class FellowDAOMybatis implements FellowDAO {
 
 	@Override
 	public void create(Fellows fellows) {
-
-		System.out.print("============" + fellows.nickname + "===================\n");
-
-		
 		sqlSession.insert("Fellows.add", fellows);
 	}
 

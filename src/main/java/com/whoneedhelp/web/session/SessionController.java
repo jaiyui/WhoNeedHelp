@@ -35,13 +35,18 @@ public class SessionController {
 
 
 	@RequestMapping(value = "/login")
-	public String login(@RequestParam(defaultValue="wait")String result, HttpSession session, Model model)
+	public String login(@RequestParam(defaultValue="wait")String result, String url, String queryString, HttpSession session, Model model)
 	{
 		HashMap<String, String> defaultParam = CommonBuilder.CommonSetter(session);
 		defaultParam = CommonBuilder.MenuSetter(defaultParam, "Login", "", "");
 		
 		model.addAllAttributes(defaultParam);
 		model.addAttribute("result", result);
+
+		String id = (String)session.getAttribute("id");
+		if (id != null) return "redirect:/dashboard/view";
+		model.addAttribute("url", url);
+		model.addAttribute("querystring", queryString);
 		return "/session/loginForm"; 
 	}
 
@@ -53,8 +58,9 @@ public class SessionController {
 	}	
 
 	@RequestMapping(value = "/start")
-	public String start(String email, String password, HttpSession session)
+	public String start(String url, String queryString, String email, String password, HttpSession session)
 	{
+		System.out.print("============" + url + "===================\n");
 		Boolean loginResult = fellowService.verify(email, password);
 
 		if (loginResult)
@@ -64,9 +70,12 @@ public class SessionController {
 			session.setAttribute("id", fellow.getId());
 			session.setAttribute("nickname", fellow.getNickname());
 			session.setMaxInactiveInterval(3600);
-			return "redirect:/dashboard/view";
+			if (url == "")
+				return "redirect:/dashboard/view";
+			else
+				return "redirect:" + url + "?" + queryString;
 		} else
-			return "redirect:login?result=failure";
+			return "redirect:login?result=failure&url=" + url + "&queryString=" + queryString;
 	}
 
 	@RequestMapping(value = "/register", method = RequestMethod.GET)
